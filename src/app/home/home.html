@@ -1,0 +1,15 @@
+@if(visibilidadeTexto) {
+@for (produto of produtos; track $index) {
+<p [ngClass]="{'texto-vermelho': produto.status_do_estoque === 'em falta'}">
+  {{produto.nome}} - {{produto.qnt}} - {{produto.status_do_estoque}}
+</p>
+
+}
+} @else {
+<p>Clique em ver produtos para ver a lista de produtos.</p>
+}
+
+<button (click)="mostrarTexto()">
+  {{ visibilidadeTexto ? 'Fechar lista' : 'Ver Produtos' }}
+</button>
+
