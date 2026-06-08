@@ -1,15 +1,126 @@
-@if(visibilidadeTexto) {
-@for (produto of produtos; track $index) {
-<p [ngClass]="{'texto-vermelho': produto.status_do_estoque === 'em falta'}">
-  {{produto.nome}} - {{produto.qnt}} - {{produto.status_do_estoque}}
-</p>
+<div class="page-wrapper">
 
-}
-} @else {
-<p>Clique em ver produtos para ver a lista de produtos.</p>
-}
+  <!-- Header -->
+  <header class="header">
+    <div class="header-brand">
+      <span class="brand-icon">🏪</span>
+      <h1 class="brand-name">EstoqueApp</h1>
+    </div>
+    <div class="header-meta">
+      <span class="badge">Gerenciamento de Estoque</span>
+    </div>
+  </header>
 
-<button (click)="mostrarTexto()">
-  {{ visibilidadeTexto ? 'Fechar lista' : 'Ver Produtos' }}
-</button>
+  <!-- Stats Bar -->
+  <section class="stats-bar">
+    <div class="stat-card">
+      <span class="stat-value">{{ produtosAtivos.length }}</span>
+      <span class="stat-label">Produtos</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">{{ totalItens }}</span>
+      <span class="stat-label">Unidades em Estoque</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">{{ totalDisponivel }}</span>
+      <span class="stat-label">Disponíveis</span>
+    </div>
+  </section>
 
+  <!-- Category Tabs -->
+  <nav class="category-tabs">
+    @for (cat of categorias; track cat.valor) {
+      <button
+        class="tab-btn"
+        [class.active]="categoriaAtiva === cat.valor"
+        (click)="selecionarCategoria(cat.valor)">
+        <span class="tab-icon">{{ cat.icone }}</span>
+        {{ cat.label }}
+      </button>
+    }
+  </nav>
+
+  <!-- ngSwitch: Renderiza seção diferente por categoria -->
+  <main class="content" [ngSwitch]="categoriaAtiva">
+
+    <!-- Higiene -->
+    <section *ngSwitchCase="'higiene'" class="category-section">
+      <div class="section-header">
+        <h2>🧴 Produtos de Higiene</h2>
+        <p class="section-desc">Cuidados pessoais e bem-estar do dia a dia.</p>
+      </div>
+      <div class="product-grid">
+        @for (produto of produtosAtivos; track produto.nome) {
+          <div class="product-card" [ngClass]="produto.status_do_estoque">
+            <div class="product-icon">{{ produto.icone }}</div>
+            <div class="product-info">
+              <h3 class="product-name">{{ produto.nome }}</h3>
+              <p class="product-price">R$ {{ produto.preco | number:'1.2-2' }}</p>
+              <p class="product-qty">Qtd: <strong>{{ produto.qnt }}</strong></p>
+            </div>
+            <span class="status-badge" [ngClass]="produto.status_do_estoque">
+              {{ produto.status_do_estoque }}
+            </span>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Beleza -->
+    <section *ngSwitchCase="'beleza'" class="category-section">
+      <div class="section-header">
+        <h2>💄 Produtos de Beleza</h2>
+        <p class="section-desc">Maquiagem, fragrâncias e cosméticos premium.</p>
+      </div>
+      <div class="product-grid">
+        @for (produto of produtosAtivos; track produto.nome) {
+          <div class="product-card" [ngClass]="produto.status_do_estoque">
+            <div class="product-icon">{{ produto.icone }}</div>
+            <div class="product-info">
+              <h3 class="product-name">{{ produto.nome }}</h3>
+              <p class="product-price">R$ {{ produto.preco | number:'1.2-2' }}</p>
+              <p class="product-qty">Qtd: <strong>{{ produto.qnt }}</strong></p>
+            </div>
+            <span class="status-badge" [ngClass]="produto.status_do_estoque">
+              {{ produto.status_do_estoque }}
+            </span>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Limpeza -->
+    <section *ngSwitchCase="'limpeza'" class="category-section">
+      <div class="section-header">
+        <h2>🧹 Produtos de Limpeza</h2>
+        <p class="section-desc">Tudo para manter seu ambiente limpo e organizado.</p>
+      </div>
+      <div class="product-grid">
+        @for (produto of produtosAtivos; track produto.nome) {
+          <div class="product-card" [ngClass]="produto.status_do_estoque">
+            <div class="product-icon">{{ produto.icone }}</div>
+            <div class="product-info">
+              <h3 class="product-name">{{ produto.nome }}</h3>
+              <p class="product-price">R$ {{ produto.preco | number:'1.2-2' }}</p>
+              <p class="product-qty">Qtd: <strong>{{ produto.qnt }}</strong></p>
+            </div>
+            <span class="status-badge" [ngClass]="produto.status_do_estoque">
+              {{ produto.status_do_estoque }}
+            </span>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Default (fallback) -->
+    <section *ngSwitchDefault class="category-section">
+      <p>Selecione uma categoria acima.</p>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 EstoqueApp · Gerenciamento inteligente de produtos</p>
+  </footer>
+
+</div>
